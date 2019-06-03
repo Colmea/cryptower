@@ -1,51 +1,44 @@
-/// --- Set up a system ---
+import UIPanel from './entities/UIPanel';
 
-class RotatorSystem {
-  // this group will contain every entity that has a Transform component
-  group = engine.getComponentGroup(Transform)
+// Tower
+const entity = new Entity();
+let shape = new GLTFShape("models/tower.gltf");
+entity.addComponent(shape);
 
-  update(dt: number) {
-    // iterate over the entities of the group
-    for (let entity of this.group.entities) {
-      // get the Transform component of the entity
-      const transform = entity.getComponent(Transform)
+const transform = new Transform();
+transform.position =  new Vector3(8, 0, 8);
+transform.scale = new Vector3(0.1, 0.1, 0.1);
 
-      // mutate the rotation
-      transform.rotate(Vector3.Up(), dt * 10)
-    }
-  }
-}
+entity.addComponent(transform);
+engine.addEntity(entity);
 
-// Add a new instance of the system to the engine
-engine.addSystem(new RotatorSystem())
+// Panels
+// RED team
+const panelRedTeam = new UIPanel({
+  text: "\n\nJoin Team RED",
+  position: new Vector3(12, 2, 5),
+  rotation: new Vector3(0, 90, 0),
+  textButton: 'JOIN',
+  onClick: () => log('Join RED team'),
+  scale: new Vector3(0.7, 0.7, 0.7),
+});
 
-/// --- Spawner function ---
+// BLUE team
+const panelBlueTeam = new UIPanel({
+  text: "\n\nJoin Team BLUE",
+  position: new Vector3(12, 2, 3),
+  rotation: new Vector3(0, 90, 0),
+  textButton: 'JOIN',
+  onClick: () => log('Join Blue team'),
+  scale: new Vector3(0.7, 0.7, 0.7),
+});
 
-function spawnCube(x: number, y: number, z: number) {
-  // create the entity
-  const cube = new Entity()
-
-  // add a transform to the entity
-  cube.addComponent(new Transform({ position: new Vector3(x, y, z) }))
-
-  // add a shape to the entity
-  cube.addComponent(new BoxShape())
-
-  // add the entity to the engine
-  engine.addEntity(cube)
-
-  return cube
-}
-
-/// --- Spawn a cube ---
-
-const cube = spawnCube(5, 1, 5)
-
-cube.addComponent(
-  new OnClick(() => {
-    cube.getComponent(Transform).scale.z *= 1.1
-    cube.getComponent(Transform).scale.x *= 0.9
-
-    spawnCube(Math.random() * 8 + 1, Math.random() * 8, Math.random() * 8 + 1)
-  })
-)
+// YELLOW team
+const panelYellowTeam = new UIPanel({
+  text: "\n\nJoin Team YELLOW",
+  position: new Vector3(12, 2, 7),
+  rotation: new Vector3(0, 90, 0),
+  textButton: 'JOIN',
+  onClick: () => log('Join Yellow team'),
+  scale: new Vector3(0.7, 0.7, 0.7),
+});
